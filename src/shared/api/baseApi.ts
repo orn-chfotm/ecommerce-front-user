@@ -10,20 +10,19 @@ export const baseApi = async <T> (
     endpoint: string,
     options: RequestInit= {}
 ) : Promise<T> => {
-
-    console.log(`BASE_URL: ${BASE_URL}`);
     const response = await fetch(`${BASE_URL}${endpoint}`, {
             headers: {
                 'Content-type': 'application/json',
                 ...(options.headers ?? {}),
             },
             method: options.method ?? HttpMethod.GET,
+            body: options.body,
             cache: 'no-store'
         }
     )
 
     if (!response.ok) {
-        throw new Error(`API Error: ${response.status}`);
+        throw await response.json();
     }
 
     const data: T = await response.json();

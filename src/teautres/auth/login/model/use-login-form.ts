@@ -33,7 +33,7 @@ export function useLoginForm() {
             }
 
         } catch (e) {
-            const failResponse = e as FailResponse;
+            const failResponse = e.body as FailResponse;
 
             console.error(`[${failResponse.status}] 시간: ${failResponse.timestamp}, 상세 메시지: ${failResponse.message}`);
             alert(`${failResponse.message}`);
