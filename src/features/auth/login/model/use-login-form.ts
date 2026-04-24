@@ -2,8 +2,8 @@
 
 import {useRouter, useSearchParams} from "next/navigation";
 import {SubmitEvent, useState} from "react";
-import {FailResponse} from "@/shared/types/api";
-import {LoginApi} from "@/teautres/auth/login/api/login-api";
+import {LoginApi} from "@/features/auth/login/api/login-api";
+import { ApiClientError } from "@/shared/api/api-client-error"
 
 export function useLoginForm() {
     const router = useRouter();
@@ -33,13 +33,12 @@ export function useLoginForm() {
             }
 
         } catch (e) {
-            const failResponse = e.body as FailResponse;
-
-            console.error(`[${failResponse.status}] 시간: ${failResponse.timestamp}, 상세 메시지: ${failResponse.message}`);
-            alert(`${failResponse.message}`);
-
-            if (failResponse.data) {
-                console.log(`에러 상세 메시지: ${failResponse.data}`);
+            if (e instanceof ApiClientError) {
+                if (e.isValidationFailed) {
+                    alert(e.firstValidationLine);
+                } else {
+                    alert(e.body.message);
+                }
             }
         } finally {
             setIsLoading(false);

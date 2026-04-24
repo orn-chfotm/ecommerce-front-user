@@ -1,6 +1,6 @@
 'use client';
 
-import {useLoginForm} from "@/teautres/auth/login/model/use-login-form";
+import {useLoginForm} from "@/features/auth/login/model/use-login-form";
 
 export default function LoginForm() {
 

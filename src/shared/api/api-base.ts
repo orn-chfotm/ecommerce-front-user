@@ -1,4 +1,6 @@
-import {HttpMethod} from "@/shared/api/constants";
+import { ApiClientError } from "./api-client-error";
+import {HttpMethod} from "@/shared/api/api-http-method";
+import {SuccessResponse} from "@/shared/api/api-types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL ?? '';
 
@@ -6,10 +8,10 @@ if (!BASE_URL) {
     console.warn('API base URL is not configured. Set NEXT_PUBLIC_BACKEND_API_URL in your env file.');
 }
 
-export const baseApi = async <T> (
+export const apiBase = async <T> (
     endpoint: string,
     options: RequestInit= {}
-) : Promise<T> => {
+) : Promise<SuccessResponse<T>> => {
     const response = await fetch(`${BASE_URL}${endpoint}`, {
             headers: {
                 'Content-type': 'application/json',
@@ -22,9 +24,10 @@ export const baseApi = async <T> (
     )
 
     if (!response.ok) {
-        throw await response.json();
+        const failResponse = await response.json();
+        throw new ApiClientError(failResponse);
     }
 
-    const data: T = await response.json();
-    return data;
+    const successResponse = (await response.json()) as SuccessResponse<T>;
+    return successResponse;
 }
