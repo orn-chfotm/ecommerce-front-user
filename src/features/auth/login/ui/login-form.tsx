@@ -1,8 +1,10 @@
 'use client';
 
+import {useRouter} from "next/navigation";
 import {useLoginForm} from "@/features/auth/login/model/use-login-form";
 
 export default function LoginForm() {
+    const router = useRouter();
 
     const {
         setEmail,
@@ -44,6 +46,17 @@ export default function LoginForm() {
                 >
                     로그인
                 </button>
+
+                <p className="text-center text-sm text-gray-600">
+                    계정이 없으신가요?{" "}
+                    <button
+                        type="button"
+                        className="font-medium text-amber-600 underline-offset-2 hover:text-amber-700 hover:underline"
+                        onClick={() => router.push("/sign")}
+                    >
+                        회원가입
+                    </button>
+                </p>
             </form>
         </div>
     )

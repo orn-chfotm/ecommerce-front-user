@@ -5,7 +5,7 @@ interface Sign {
     password: string,
     name: string,
     gender: Gender,
-    birthDate: Date
+    birthDate: string
 }
 
 export type SignRequest = Sign;

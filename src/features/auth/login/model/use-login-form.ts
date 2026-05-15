@@ -3,8 +3,9 @@
 import {useRouter, useSearchParams} from "next/navigation";
 import {SubmitEvent, useState} from "react";
 import {LoginApi} from "@/features/auth/login/api/login-api";
-import { ApiClientError } from "@/shared/api/api-client-error"
-
+import {ApiClientError} from "@/shared/api/api-client-error";
+import type {SuccessResponse} from "@/shared/api/api-types";
+import type {LoginResponse} from "@/features/auth/login/types";
 export function useLoginForm() {
     const router = useRouter();
     const searchParam = useSearchParams();
@@ -19,15 +20,15 @@ export function useLoginForm() {
         setIsLoading(true);
 
         try {
-            const response = await LoginApi({
+            const response: SuccessResponse<LoginResponse> = await LoginApi({
                 email,
                 password
             });
 
-            if (response.accessToken && response.refreshToken) {
-                localStorage.setItem('accessToken', response.accessToken);
-                localStorage.setItem('refreshToken', response.refreshToken);
-
+            const {accessToken, refreshToken} = response.data;
+            if (accessToken && refreshToken) {
+                localStorage.setItem('accessToken', accessToken);
+                localStorage.setItem('refreshToken', refreshToken);
                 router.push(redirectUrl);
                 router.refresh();
             }
