@@ -1,10 +1,12 @@
 import {Gender} from "@/features/auth/sign/model/gender";
 
+export type GenderSelectValue = Gender | '';
+
 interface Sign {
     email: string,
     password: string,
     name: string,
-    gender: Gender,
+    gender: GenderSelectValue,
     birthDate: string
 }
 

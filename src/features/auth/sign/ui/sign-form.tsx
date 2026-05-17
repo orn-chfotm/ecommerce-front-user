@@ -1,17 +1,13 @@
 "use client";
 
 import {Gender} from "@/features/auth/sign/model/gender";
-import {useSignForm} from "@/features/auth/sign/model/use-sign-form";
+import {useSignForm} from "@/features/auth/sign/model/sign-form-use";
+import { GenderSelectValue } from "../types";
 
 export default function SignForm() {
     const {
-        setEmail,
-        setPassword,
-        setName,
-        gender,
-        setGender,
-        birthDate,
-        setBirthDate,
+        form,
+        setForm,
         isLoading,
         onSubmit,
     } = useSignForm();
@@ -27,11 +23,12 @@ export default function SignForm() {
                     id="sign-email"
                     className="w-full rounded-md border border-gray-300 px-4 py-3 outline-none focus:border-black"
                     name="email"
+                    value={form.email}
                     aria-label="이메일"
                     placeholder="이메일"
                     required
                     autoComplete="email"
-                    onChange={(event) => setEmail(event.target.value)}
+                    onChange={(event) => setForm({ ...form, email: event.target.value })}
                 />
 
                 <input
@@ -39,11 +36,12 @@ export default function SignForm() {
                     id="sign-password"
                     className="w-full rounded-md border border-gray-300 px-4 py-3 outline-none focus:border-black"
                     name="password"
+                    value={form.password}
                     aria-label="비밀번호"
                     placeholder="비밀번호"
                     required
                     autoComplete="new-password"
-                    onChange={(event) => setPassword(event.target.value)}
+                    onChange={(event) => setForm({ ...form, password: event.target.value })}
                 />
 
                 <input
@@ -51,11 +49,12 @@ export default function SignForm() {
                     id="sign-name"
                     className="w-full rounded-md border border-gray-300 px-4 py-3 outline-none focus:border-black"
                     name="name"
+                    value={form.name}
                     aria-label="이름"
                     placeholder="이름"
                     required
                     autoComplete="name"
-                    onChange={(event) => setName(event.target.value)}
+                    onChange={(event) => setForm({ ...form, name: event.target.value })}
                 />
 
                 <div className="flex flex-col gap-1">
@@ -66,10 +65,9 @@ export default function SignForm() {
                         id="sign-gender"
                         name="gender"
                         className="w-full rounded-md border border-gray-300 bg-white px-4 py-3 outline-none focus:border-black"
-                        value={gender}
+                        value={form.gender}
                         onChange={(event) => {
-                            const value = event.target.value;
-                            setGender(value === "" ? "" : (value as Gender));
+                            setForm({ ...form, gender: event.target.value as GenderSelectValue });
                         }}
                     >
                         <option value="">선택해 주세요</option>
@@ -87,8 +85,8 @@ export default function SignForm() {
                         id="sign-birth"
                         name="birthDate"
                         className="w-full rounded-md border border-gray-300 px-4 py-3 outline-none focus:border-black"
-                        value={birthDate}
-                        onChange={(event) => setBirthDate(event.target.value)}
+                        value={form.birthDate}
+                        onChange={(event) => setForm({ ...form, birthDate: event.target.value })}
                     />
                 </div>
 
