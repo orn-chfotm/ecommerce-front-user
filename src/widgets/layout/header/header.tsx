@@ -1,4 +1,5 @@
 import Link from "next/link";
+import HeaderAuthNav from "@/widgets/layout/header/header-auth-nav";
 
 export default function Header() {
     return (
@@ -25,12 +26,7 @@ export default function Header() {
                     >
                         홈
                     </Link>
-                    <Link
-                        href="/login"
-                        className="font-medium text-amber-600"
-                    >
-                        로그인
-                    </Link>
+                    <HeaderAuthNav />
                 </nav>
             </div>
         </header>

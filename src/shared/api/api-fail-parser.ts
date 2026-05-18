@@ -1,8 +1,9 @@
 import type {FailResponse, ValidationError} from "./api-types";
 
 /**
- * HTTP error 응답 JSON이 래퍼 `{ body: FailResponse }` 이거나
- * 평면 `FailResponse` 인 경우 모두 FailResponse 로 맞춥니다.
+ * HTTP error JSON을 {@link FailResponse}로 맞춥니다.
+ * - 평면: `{ timestamp, status, message, data? }` (현재 백엔드)
+ * - 레거시 래퍼: `{ body: FailResponse }` 호환
  */
 export function parseFailResponseFromJson(raw: unknown): FailResponse {
     const now = new Date().toISOString();

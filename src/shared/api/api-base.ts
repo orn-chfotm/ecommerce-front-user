@@ -1,7 +1,8 @@
-import { ApiClientError } from "./api-client-error";
+import {getAuthHeaders} from "@/shared/lib/auth-token";
+import {ApiClientError} from "./api-client-error";
+import {parseFailResponseFromJson} from "./api-fail-parser";
 import {HttpMethod} from "@/shared/api/api-http-method";
 import {SuccessResponse} from "@/shared/api/api-types";
-
 const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL ?? '';
 
 if (!BASE_URL) {
@@ -14,7 +15,8 @@ export const apiBase = async <T> (
 ) : Promise<SuccessResponse<T>> => {
     const response = await fetch(`${BASE_URL}${endpoint}`, {
             headers: {
-                'Content-type': 'application/json',
+                "Content-Type": "application/json",
+                ...getAuthHeaders(),
                 ...(options.headers ?? {}),
             },
             method: options.method ?? HttpMethod.GET,
@@ -24,10 +26,14 @@ export const apiBase = async <T> (
     )
 
     if (!response.ok) {
-        const failResponse = await response.json();
-        throw new ApiClientError(failResponse);
+        let raw: unknown;
+        try {
+            raw = await response.json();
+        } catch {
+            raw = null;
+        }
+        throw new ApiClientError(parseFailResponseFromJson(raw));
     }
-
     const successResponse = (await response.json()) as SuccessResponse<T>;
     return successResponse;
 }

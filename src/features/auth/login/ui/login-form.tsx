@@ -7,8 +7,7 @@ export default function LoginForm() {
     const router = useRouter();
 
     const {
-        setEmail,
-        setPassword,
+        onChangeEvent,
         isLoading,
         onSubmit
     } = useLoginForm();
@@ -26,7 +25,7 @@ export default function LoginForm() {
                     name="email"
                     aria-label="이메일"
                     placeholder="아이디"
-                    onChange={(event) => setEmail(event.target.value)}
+                    onChange={onChangeEvent}
                 />
 
                 <input
@@ -36,7 +35,7 @@ export default function LoginForm() {
                     name="password"
                     aria-label="비밀번호"
                     placeholder="비밀번호"
-                    onChange={(event) => setPassword(event.target.value)}
+                    onChange={onChangeEvent}
                 />
 
                 <button

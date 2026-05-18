@@ -1,18 +1,28 @@
 "use client";
 
 import {useRouter, useSearchParams} from "next/navigation";
-import {SubmitEvent, useState} from "react";
-import {LoginApi} from "@/features/auth/login/api/login-api";
+import {ChangeEvent, SubmitEvent, useState} from "react";
+import {loginApi} from "@/features/auth/login/api/login-api";
 import {ApiClientError} from "@/shared/api/api-client-error";
+import {setAuthTokens} from "@/shared/lib/auth-token";
 import type {SuccessResponse} from "@/shared/api/api-types";
-import type {LoginResponse} from "@/features/auth/login/types";
+import type {LoginRequest, LoginResponse} from "@/features/auth/login/types";
 export function useLoginForm() {
     const router = useRouter();
     const searchParam = useSearchParams();
     const redirectUrl = searchParam?.get("redirectUrl") || '/';
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [form, setForm] = useState<LoginRequest>({
+        email: '',
+        password: '',
+    });
+
+    const onChangeEvent = (event: ChangeEvent<HTMLInputElement>) => {
+        const {name, value} = event.target;
+
+        setForm({ ...form, [name as keyof LoginRequest]: value });
+    };
+
     const [isLoading, setIsLoading] = useState(false);
 
     const onSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
@@ -20,26 +30,20 @@ export function useLoginForm() {
         setIsLoading(true);
 
         try {
-            const response: SuccessResponse<LoginResponse> = await LoginApi({
-                email,
-                password
-            });
-
+            const response: SuccessResponse<LoginResponse> = await loginApi(form);
             const {accessToken, refreshToken} = response.data;
             if (accessToken && refreshToken) {
-                localStorage.setItem('accessToken', accessToken);
-                localStorage.setItem('refreshToken', refreshToken);
+                setAuthTokens(accessToken, refreshToken);
                 router.push(redirectUrl);
                 router.refresh();
             }
 
         } catch (e) {
             if (e instanceof ApiClientError) {
-                if (e.isValidationFailed) {
-                    alert(e.firstValidationLine);
-                } else {
-                    alert(e.body.message);
-                }
+                alert(e.alertMessage);
+            } else {
+                console.error(e);
+                alert("로그인 요청 중 오류가 발생했습니다.");
             }
         } finally {
             setIsLoading(false);
@@ -47,8 +51,7 @@ export function useLoginForm() {
     };
 
     return {
-        setEmail,
-        setPassword,
+        onChangeEvent,
         isLoading,
         onSubmit
     }

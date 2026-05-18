@@ -6,8 +6,7 @@ import { GenderSelectValue } from "../types";
 
 export default function SignForm() {
     const {
-        form,
-        setForm,
+        onChangeEvent,
         isLoading,
         onSubmit,
     } = useSignForm();
@@ -23,12 +22,11 @@ export default function SignForm() {
                     id="sign-email"
                     className="w-full rounded-md border border-gray-300 px-4 py-3 outline-none focus:border-black"
                     name="email"
-                    value={form.email}
                     aria-label="이메일"
                     placeholder="이메일"
                     required
                     autoComplete="email"
-                    onChange={(event) => setForm({ ...form, email: event.target.value })}
+                    onChange={onChangeEvent}
                 />
 
                 <input
@@ -36,12 +34,11 @@ export default function SignForm() {
                     id="sign-password"
                     className="w-full rounded-md border border-gray-300 px-4 py-3 outline-none focus:border-black"
                     name="password"
-                    value={form.password}
                     aria-label="비밀번호"
                     placeholder="비밀번호"
                     required
                     autoComplete="new-password"
-                    onChange={(event) => setForm({ ...form, password: event.target.value })}
+                    onChange={onChangeEvent}
                 />
 
                 <input
@@ -49,12 +46,11 @@ export default function SignForm() {
                     id="sign-name"
                     className="w-full rounded-md border border-gray-300 px-4 py-3 outline-none focus:border-black"
                     name="name"
-                    value={form.name}
                     aria-label="이름"
                     placeholder="이름"
                     required
                     autoComplete="name"
-                    onChange={(event) => setForm({ ...form, name: event.target.value })}
+                    onChange={onChangeEvent}
                 />
 
                 <div className="flex flex-col gap-1">
@@ -65,10 +61,7 @@ export default function SignForm() {
                         id="sign-gender"
                         name="gender"
                         className="w-full rounded-md border border-gray-300 bg-white px-4 py-3 outline-none focus:border-black"
-                        value={form.gender}
-                        onChange={(event) => {
-                            setForm({ ...form, gender: event.target.value as GenderSelectValue });
-                        }}
+                        onChange={onChangeEvent}
                     >
                         <option value="">선택해 주세요</option>
                         <option value={Gender.MAN}>남성</option>
@@ -85,8 +78,7 @@ export default function SignForm() {
                         id="sign-birth"
                         name="birthDate"
                         className="w-full rounded-md border border-gray-300 px-4 py-3 outline-none focus:border-black"
-                        value={form.birthDate}
-                        onChange={(event) => setForm({ ...form, birthDate: event.target.value })}
+                        onChange={onChangeEvent}
                     />
                 </div>
 
