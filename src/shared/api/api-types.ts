@@ -9,6 +9,7 @@ export interface SuccessResponse<T> extends Response {
 }
 
 export interface FailResponse extends Response {
+    code: string;
     data?: ValidationError[]
 }
 
