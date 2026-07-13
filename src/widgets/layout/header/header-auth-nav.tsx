@@ -4,6 +4,7 @@ import Link from "next/link";
 import {usePathname} from "next/navigation";
 import {useEffect, useState} from "react";
 import {hasAccessToken, subscribeAuthChange} from "@/shared/lib/auth-token";
+import LogoutButton from "@/features/auth/logout/ui/logout-button";
 
 export default function HeaderAuthNav() {
     const pathname = usePathname();
@@ -31,12 +32,15 @@ export default function HeaderAuthNav() {
 
     if (isLoggedIn) {
         return (
-            <Link
-                href="/mypage"
-                className="font-medium text-amber-600 transition-colors hover:text-amber-700"
-            >
-                회원 정보
-            </Link>
+            <div className="flex items-center gap-4">
+                <Link
+                    href="/mypage"
+                    className="font-medium text-amber-600 transition-colors hover:text-amber-700"
+                >
+                    회원 정보
+                </Link>
+                <LogoutButton />
+            </div>
         );
     }
 
